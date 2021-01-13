@@ -73,7 +73,70 @@ app.post("/create", (req, res) => {
           .catch((err) => {
             console.log(err);
           });
-      });    
+      });   
+      
+      
+app.post("/update", (req, res) => {
+        console.log(req.body);
+      
+        var datain = req.body;
+      
+        var payload = {
+          records: [
+            {
+              id: datain.id,
+              fields: datain.updatedata,
+            },
+          ],
+        };
+      
+      //to update a record we have to send the new record with it's the id to Airtable API. 
+      
+      
+        fetch(`https://api.airtable.com/v0/${AIRTABLEBASEID}/${AIRTABLETABLENAME}`, {
+          method: "patch", // make sure it is a "PATCH request"
+          body: JSON.stringify(payload),
+          headers: {
+            Authorization: `Bearer ${AIRTABLEAPI}`, // API key
+            "Content-Type": "application/json",
+          },
+        })
+          .then((res) => res.json())
+          .then((result) => {
+            console.log(result);
+            res.json(result);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
+        
+app.post("/delete", (req, res) => {
+        console.log(req.body);
+      
+        //we need to send a "DELETE" request with our base id table name, the id of the record we wish to delete and our API key to get the existing data on our table.
+      
+        fetch(
+          `https://api.airtable.com/v0/${AIRTABLEBASEID}/${AIRTABLETABLENAME}/${req.body.id}`,
+          {
+            method: "delete",
+            body: JSON.stringify(payload),
+            headers: {
+              Authorization: `Bearer ${AIRTABLEAPI}`,
+                 "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((res) => res.json())
+          .then((result) => {
+            console.log(result);
+            res.json(result);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
+      
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
