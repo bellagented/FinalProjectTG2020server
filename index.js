@@ -156,7 +156,8 @@ app
             return rec.fields.User === req.params.name;
           })
           .map((r) => {
-            return { game: r.fields.Game, text: r.fields.Review };
+          
+            return { game: r.fields.Game, text: r.fields.Review, comments:JSON.parse(r.fields.Comments), id:r.id};
           })
           .reverse();
         return myrec;
@@ -182,6 +183,35 @@ app
       `https://api.airtable.com/v0/${AIRTABLEBASEID}/${AIRTABLETABLEREVIEW}`,
       {
         method: "post", // make sure it is a "POST request"
+        body: JSON.stringify(payload),
+        headers: {
+          Authorization: `Bearer ${AIRTABLEAPI}`, // API key
+          "Content-Type": "application/json", // we will recive a json object
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((result) => {
+        res.json(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  })
+  .patch((req, res) => {
+    var datain = req.body;
+
+    var payload = {
+      records: [
+        datain,
+        
+      ],
+    };
+    
+    fetch(
+      `https://api.airtable.com/v0/${AIRTABLEBASEID}/${AIRTABLETABLEREVIEW}`,
+      {
+        method: "patch", // make sure it is a "POST request"
         body: JSON.stringify(payload),
         headers: {
           Authorization: `Bearer ${AIRTABLEAPI}`, // API key
