@@ -198,6 +198,69 @@ app
       });
   });
 
+  //backend lista dei desideri personale
+
+const AIRTABLETABLEWISHLIST = "WishlistTable";
+
+app
+  .route("/mylist/:name")
+  .get((req, res) => {
+    fetch(
+      `https://api.airtable.com/v0/${AIRTABLEBASEID}/${AIRTABLETABLEWISHLIST}?view=Grid%20view`,
+      {
+        headers: { Authorization: `Bearer ${AIRTABLEAPI}` },
+      }
+    )
+      .then((res) => res.json())
+      .then((tabledata) => {
+        const myrec = tabledata.records
+          .filter((rec) => {
+            return rec.fields.User === req.params.name;
+          })
+          .map((r) => {
+            return { game: r.fields.Game };
+          })
+          .reverse();
+        return myrec;
+      })
+      .then((result) => {
+        res.json(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  })
+  .post((req, res) => {
+    var datain = req.body;
+
+    var payload = {
+      records: [
+        {
+          fields: datain,
+        },
+      ],
+    };
+    fetch(
+      `https://api.airtable.com/v0/${AIRTABLEBASEID}/${AIRTABLETABLEWISHLIST}`,
+      {
+        method: "post", // make sure it is a "POST request"
+        body: JSON.stringify(payload),
+        headers: {
+          Authorization: `Bearer ${AIRTABLEAPI}`, // API key
+          "Content-Type": "application/json", // we will recive a json object
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((result) => {
+        res.json(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
