@@ -233,7 +233,7 @@ app
   const AIRTABLETABLEPOST = "PostTable";
 
   app
-    .route("/post/:name")
+    .route("/post")
     .get((req, res) => {
       fetch(
         `https://api.airtable.com/v0/${AIRTABLEBASEID}/${AIRTABLETABLEPOST}?view=Grid%20view`,
@@ -244,12 +244,9 @@ app
         .then((res) => res.json())
         .then((tabledata) => {
           const myrec = tabledata.records
-            .filter((rec) => {
-              return rec.fields.User !== req.params.name;
-            })
             .map((r) => {
             
-              return { game: r.fields.Game, text: r.fields.Review, comments:JSON.parse(r.fields.Comments), id:r.id};
+              return { from: r.fields.User, text: r.fields.Post,img:r.fields.Img, comments:JSON.parse(r.fields.Comments), id:r.id,type:"post"};
             })
             .reverse();
           return myrec;
