@@ -337,7 +337,7 @@ app
              return rec.fields.User === req.params.name;
            })
            .map((r) => {
-             return { game: r.fields.Game, id: r.id };
+             return { game: r.fields.Game, id: r.id, url: r.fields.Img };
            })
            .reverse();
          return myrec;
@@ -408,6 +408,34 @@ app
     });
   });
 
-app.listen(port, () => {
+
+
+
+  app
+      .route("/gamedetail")
+      .post((req, res) => {
+        
+        fetch("https://rawg-video-games-database.p.rapidapi.com/games/"+ req.body.name, {
+          method : "GET",
+          headers : {
+            "x-rapidapi-key": "0bbf63d1ebmsh55d1423dcde490ep1f3a90jsn8208e67fac5f",
+            "x-rapidapi-host": "rawg-video-games-database.p.rapidapi.com",
+            "useQueryString": true
+          }
+        })
+        .then((res) => res.json())
+        .then((gamedata) => {
+         
+          return {name: gamedata.name, url: gamedata.background_image };
+        })
+        .then((result) => {
+          res.json(result);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      });
+
+        app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
