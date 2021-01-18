@@ -120,7 +120,7 @@ app.post("/delete", (req, res) => {
           `https://api.airtable.com/v0/${AIRTABLEBASEID}/${AIRTABLETABLENAME}/${req.body.id}`,
           {
             method: "delete",
-            body: JSON.stringify(payload),
+            //body: JSON.stringify(payload),
             headers: {
               Authorization: `Bearer ${AIRTABLEAPI}`,
                  "Content-Type": "application/json",
@@ -340,7 +340,7 @@ app
              return rec.fields.User === req.params.name;
            })
            .map((r) => {
-             return { game: r.fields.Game };
+             return { game: r.fields.Game, id: r.id };
            })
            .reverse();
          return myrec;
@@ -380,8 +380,36 @@ app
        .catch((err) => {
          console.log(err);
        });
-      });
+})
+    .delete((req, res) => {
+      var datain = req.body;
 
+  //     var payload = {
+  //       records: [
+  //         datain,
+      
+  //   ],
+  // };
+  
+  fetch(
+    `https://api.airtable.com/v0/${AIRTABLEBASEID}/${AIRTABLETABLEWISHLIST}/${req.body.id}`,
+    {
+      method: "delete", 
+      // body: JSON.stringify(payload),
+      headers: {
+        Authorization: `Bearer ${AIRTABLEAPI}`, // API key
+        // "Content-Type": "application/json", // we will recive a json object
+      },
+    }
+  )
+    .then((res) => res.json())
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  });
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
