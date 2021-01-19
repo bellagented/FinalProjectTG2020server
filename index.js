@@ -235,22 +235,41 @@ app
   app
     .route("/post")
     .get((req, res) => {
-      fetch(
+    let fetchPost=  fetch(
         `https://api.airtable.com/v0/${AIRTABLEBASEID}/${AIRTABLETABLEPOST}?view=Grid%20view`,
         {
           headers: { Authorization: `Bearer ${AIRTABLEAPI}` },
         }
-      )
-        .then((res) => res.json())
-        .then((tabledata) => {
-          const myrec = tabledata.records
-            .map((r) => {
-            
-              return { from: r.fields.User, text: r.fields.Post,img:r.fields.Img, comments:JSON.parse(r.fields.Comments), id:r.id,type:"post"};
-            })
-            .reverse();
-          return myrec;
-        })
+      ).then((res) => res.json())
+      .then((tabledata) => {
+        const post = tabledata.records
+          .map((r) => {
+          
+            return { from: r.fields.User, text: r.fields.Post,img:r.fields.Img, comments:JSON.parse(r.fields.Comments), id:r.id,type:"post", time:r.createdTime};
+          });
+        return post;
+      }) .catch((err) => {
+        console.log(err);
+      });
+    let fetchRev=fetch(
+      `https://api.airtable.com/v0/${AIRTABLEBASEID}/${AIRTABLETABLEREVIEW}?view=Grid%20view`,
+      {
+        headers: { Authorization: `Bearer ${AIRTABLEAPI}` },
+      }
+    ).then((res) => res.json())
+    .then((tabledata) => {
+      const rec = tabledata.records
+        .map((r) => {
+        
+          return { from: r.fields.User, text: r.fields.Review,game:r.fields.Game, comments:JSON.parse(r.fields.Comments), id:r.id,type:"review", time:r.createdTime};
+        });
+      return rec;
+    }) .catch((err) => {
+      console.log(err);
+    });
+      Promise.all([fetchPost,fetchRev])
+        .then(([post,rec]) =>  post.concat(rec).sort((a, b) => Date.parse(b.time) -  Date.parse(a.time)))
+
         .then((result) => {
           res.json(result);
         })
