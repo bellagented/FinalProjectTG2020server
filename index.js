@@ -553,6 +553,8 @@ app
            });
           });
 
+// backend API RAWG
+
 app
 .route("/gamedetail")
 .post((req, res) => {
@@ -578,5 +580,98 @@ app
   });
 });
 
-  app.listen(port, () => {console.log(`Example app listening at http://localhost:${port}`);
+// backend lista giochi preferiti
+
+  const AIRTABLETABLEFAVOURITE = "FavouriteTable";
+
+ app
+   .route("/favourite/:name")
+   .get((req, res) => {
+     fetch(
+       `https://api.airtable.com/v0/${AIRTABLEBASEID}/${AIRTABLETABLEFAVOURITE}?view=Grid%20view`,
+       {
+         headers: { Authorization: `Bearer ${AIRTABLEAPI}` },
+       }
+     )
+       .then((res) => res.json())
+       .then((tabledata) => {
+         const myrec = tabledata.records
+           .filter((rec) => {
+             return rec.fields.User === req.params.name;
+           })
+           .map((r) => {
+             return { game: r.fields.Game, id: r.id, url: r.fields.Img };
+           })
+           .reverse();
+         return myrec;
+       })
+       .then((result) => {
+         res.json(result);
+       })
+       .catch((err) => {
+         console.log(err);
+       });
+   })
+   .post((req, res) => {
+     var datain = req.body;
+ 
+     var payload = {
+       records: [
+         {
+           fields: datain,
+         },
+       ],
+     };
+     fetch(
+       `https://api.airtable.com/v0/${AIRTABLEBASEID}/${AIRTABLETABLEFAVOURITE}`,
+       {
+         method: "post", // make sure it is a "POST request"
+         body: JSON.stringify(payload),
+         headers: {
+           Authorization: `Bearer ${AIRTABLEAPI}`, // API key
+           "Content-Type": "application/json", // we will recive a json object
+         },
+       }
+     )
+       .then((res) => res.json())
+       .then((result) => {
+         res.json(result);
+       })
+       .catch((err) => {
+         console.log(err);
+       });
+})
+    .delete((req, res) => {
+      var datain = req.body;
+
+  //     var payload = {
+  //       records: [
+  //         datain,
+      
+  //   ],
+  // };
+  
+  fetch(
+    `https://api.airtable.com/v0/${AIRTABLEBASEID}/${AIRTABLETABLEFAVOURITE}/${req.body.id}`,
+    {
+      method: "delete", 
+      // body: JSON.stringify(payload),
+      headers: {
+        Authorization: `Bearer ${AIRTABLEAPI}`, // API key
+        // "Content-Type": "application/json", // we will recive a json object
+      },
+    }
+  )
+    .then((res) => res.json())
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  });
+
+
+
+  app.listen(port, () => {console.log(`CoinOp listening at http://localhost:${port}`);
 });
