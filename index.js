@@ -444,7 +444,7 @@ app
            .then((tabledata) => {
              const myrec = tabledata.records
                .map((r) => {
-                 return { game: r.fields.Game, date:r.fields.Dates ,id: r.id, partecipants: JSON.parse(r.fields.Partecipants), user:r.fields.User };
+                 return { game: r.fields.Game, date:r.fields.Formula ,id: r.id, partecipants: JSON.parse(r.fields.Partecipants), user:r.fields.User };
                })
                .reverse();
              return myrec;
@@ -530,7 +530,7 @@ app
                  return rec.fields.User === req.params.name;
                })
                .map((r) => {
-                 return { game: r.fields.Game, date:r.fields.Dates ,id: r.id, partecipants: JSON.parse(r.fields.Partecipants), user:r.fields.User };
+                 return { game: r.fields.Game, date:r.fields.Formula ,id: r.id, partecipants: JSON.parse(r.fields.Partecipants), user:r.fields.User };
                })
                .reverse();
              return myrec;
