@@ -723,5 +723,34 @@ app
       });
   });
 
+  app
+  .route("/contact/:name")
+  .get((req, res) => {
+    fetch(
+      `https://api.airtable.com/v0/${AIRTABLEBASEID}/${AIRTABLETABLEPROFILE}?view=Grid%20view`,
+      {
+        headers: { Authorization: `Bearer ${AIRTABLEAPI}` },
+      }
+    )
+      .then((res) => res.json())
+      .then((tabledata) => {
+        const profile = tabledata.records
+          .filter((rec) => {
+            return rec.fields.Name !== req.params.name;
+          })
+          .map((r) => {
+            return {id:r.fields.Name, name:r.fields.Name};
+          })
+          .reverse();
+        return profile;
+      })
+      .then((result) => {
+        res.json(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+
   app.listen(port, () => {console.log(`CoinOp listening at http://localhost:${port}`);
 });
