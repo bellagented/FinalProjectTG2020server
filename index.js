@@ -356,7 +356,7 @@ app
              return rec.fields.User === req.params.name;
            })
            .map((r) => {
-             return { game: r.fields.Game, id: r.id, url: r.fields.Img };
+             return { game: r.fields.Game, id: r.id, url: r.fields.Img , critic:r.fields.Critic};
            })
            .reverse();
          return myrec;
@@ -589,7 +589,7 @@ app
   .then((res) => res.json())
   .then((gamedata) => {
    
-    return {name: gamedata.name, url: gamedata.background_image };
+    return {name: gamedata.name, url: gamedata.background_image, critic: gamedata.metacritic_url};
   })
   .then((result) => {
     res.json(result);
@@ -619,7 +619,7 @@ app
              return rec.fields.User === req.params.name;
            })
            .map((r) => {
-             return { game: r.fields.Game, id: r.id, url: r.fields.Img };
+             return { game: r.fields.Game, id: r.id, url: r.fields.Img , critic:r.fields.Critic};
            })
            .reverse();
          return myrec;
