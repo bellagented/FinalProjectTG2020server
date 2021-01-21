@@ -1,7 +1,7 @@
-
-const express = require("express");
+import requirejs from "requirejs";
+import express from "express";
 const app = express();
-const cors = require("cors");
+import cors from "cors";
 
 
 
@@ -12,7 +12,7 @@ app.use(
   })
 );
 
-const io = require("socket.io")(5000, {
+const io = requirejs("socket.io")(5000, {
   cors: {
     origin: "http://localhost:3000",
     methods: ["GET", "POST"]
