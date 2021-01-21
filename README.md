@@ -29,3 +29,37 @@ Airtable dovrà avere le seguenti tabelle:
 | User | Game | Review | Comments |
 | ----------- | ----------- |----------- |----------- |
 
+### WishlistTable
+
+| User | Game | Img | Critic |
+| ----------- | ----------- |----------- |----------- |
+
+### PostTable
+
+| User | Post | Img | Comments |
+| ----------- | ----------- |----------- |----------- |
+
+### CalendarTable
+
+| User | Dates | Formula | Partecipants | Game |
+| ----------- | ----------- |----------- |----------- |----------- |
+
+### FavouriteTable
+
+| User | Game | Favourite | Critic |
+| ----------- | ----------- |----------- |----------- |
+
+### UserTable
+
+| Name | Picture | 
+| ----------- | ----------- |
+
+## Comandi
+
+per avviare il backend in sviluppo utilizzando nodemon :
+
+` $ npm run devStart`
+
+per avviare socket.io, necessario per utilizzare la chat:
+
+` $ node server.js`
