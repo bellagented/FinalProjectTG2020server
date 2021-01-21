@@ -17,7 +17,7 @@ il progetto necessità:\
 
 `CLOUDINARY_NAME= *your cloudinary name*`
 
- di un account [AirTable](https://cloudinary.com/) e di inserire nel file .env:
+ di un account [AirTable](https://airtable.com/) e di inserire nel file .env:
 
 `AIRTABLE_API_KEY=*your key*`\
 `AIRTABLE_BASE_ID=*your id*`
